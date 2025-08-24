@@ -45,6 +45,7 @@ window.onload = () => {
 
     let originalImage = null;
     let uploadedFile = null;
+    let lastInspectedPixel = { x: 5, y: 5 };
     let controlElements = document.querySelectorAll('.control-btn, .control-btn-small, .slider');
 
     // === EXPLANATION TEXTS ===
@@ -66,6 +67,7 @@ window.onload = () => {
     function updateExplanation(key) {
         explanationBox.innerHTML = explanations[key];
         MathJax.typeset(); // Re-render the formulas
+        inspectPixel(); 
     }
 
     // === EVENT LISTENERS ===
@@ -383,11 +385,18 @@ window.onload = () => {
         
     function inspectPixel(e) {
         if (!originalImage) return;
-        const rect = originalCanvas.getBoundingClientRect();
-        const scaleX = originalCanvas.width / rect.width;
-        const scaleY = originalCanvas.height / rect.height;
-        const x = Math.floor((e.clientX - rect.left) * scaleX);
-        const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+        if (e) { // If called by a mouse click event
+            const rect = originalCanvas.getBoundingClientRect();
+            const scaleX = originalCanvas.width / rect.width;
+            const scaleY = originalCanvas.height / rect.height;
+            lastInspectedPixel.x = Math.floor((e.clientX - rect.left) * scaleX);
+            lastInspectedPixel.y = Math.floor((e.clientY - rect.top) * scaleY);
+        }
+        
+        // Use the stored coordinates for the inspection
+        const { x, y } = lastInspectedPixel;
+        
 
         const pixelData = originalCtx.getImageData(x, y, 1, 1).data;
         const [r, g, b, a] = pixelData;
