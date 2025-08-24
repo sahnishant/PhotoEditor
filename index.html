@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Processor</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div id="controls">
+            <h1>Controls</h1>
+            <label for="imageLoader" class="upload-label">Upload Image</label>
+            <input type="file" id="imageLoader" accept="image/*">
+            <button id="resetBtn" class="control-btn" disabled>Reset to Original</button>
+            <fieldset>
+                <legend>File Analysis</legend>
+                <button id="analyzeBtn" class="control-btn" disabled>Analyze JPEG Structure</button>
+            </fieldset>
+            <fieldset>
+                <legend>Color & Tone</legend>
+                <button id="grayscaleBtn" class="control-btn" disabled>Grayscale</button>
+                <button id="invertBtn" class="control-btn" disabled>Invert Colors</button>
+                <div class="slider-group">
+                    <label for="brightnessSlider">Brightness: <span id="brightnessValue">0</span></label>
+                    <input type="range" id="brightnessSlider" min="-100" max="100" value="0" class="slider" disabled>
+                </div>
+                <div class="slider-group">
+                    <label for="contrastSlider">Contrast: <span id="contrastValue">1</span></label>
+                    <input type="range" id="contrastSlider" min="0" max="3" value="1" step="0.1" class="slider" disabled>
+                </div>
+                <div class="slider-group">
+                    <label for="thresholdSlider">Threshold: <span id="thresholdValue">128</span></label>
+                    <input type="range" id="thresholdSlider" min="0" max="255" value="128" class="slider" disabled>
+                    <button id="thresholdBtn" class="control-btn-small" disabled>Apply Threshold</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Channel Splitting</legend>
+                <div class="btn-group">
+                    <button id="redChannelBtn" class="control-btn" disabled>Red</button>
+                    <button id="greenChannelBtn" class="control-btn" disabled>Green</button>
+                    <button id="blueChannelBtn" class="control-btn" disabled>Blue</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Convolution Filters</legend>
+                <button id="blurBtn" class="control-btn" disabled>Smooth (Blur)</button>
+                <button id="sharpenBtn" class="control-btn" disabled>Sharpen</button>
+                <p class="small-info">Edge Detection:</p>
+                <div class="btn-group">
+                    <button id="edgeLeftBtn" class="control-btn" disabled>Left</button>
+                    <button id="edgeTopBtn" class="control-btn" disabled>Top</button>
+                    <button id="edgeBothBtn" class="control-btn" disabled>Sobel</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Geometric Operations</legend>
+                <div class="slider-group">
+                    <label for="downscaleSlider">Downscale: <span id="downscaleValue">100</span>%</label>
+                    <input type="range" id="downscaleSlider" min="10" max="100" value="100" step="5" class="slider" disabled>
+                    <button id="downscaleBtn" class="control-btn-small" disabled>Apply Scale</button>
+                </div>
+                <div class="slider-group">
+                    <label for="rotateSlider">Rotation: <span id="rotateValue">0</span>°</label>
+                    <input type="range" id="rotateSlider" min="-180" max="180" value="0" class="slider" disabled>
+                    <button id="rotateBtn" class="control-btn-small" disabled>Apply Rotation</button>
+                </div>
+                <p class="small-info">Flipping:</p>
+                <div class="btn-group">
+                    <button id="flipHBtn" class="control-btn" disabled>Horizontal</button>
+                    <button id="flipVBtn" class="control-btn" disabled>Vertical</button>
+                </div>
+            </fieldset>
+        </div>
+
+        <div id="main-content">
+            <div id="explanation-container">
+                <h2>How It Works</h2>
+                <div id="explanationBox">
+                    <p>Welcome! Upload an image to begin. As you apply transformations, this area will explain the underlying mathematics and processes.</p>
+                </div>
+            </div>
+            <div class="image-area">
+                <div class="image-wrapper">
+                    <h3>Original</h3>
+                    <canvas id="originalCanvas"></canvas>
+                    <div id="pixel-inspector">
+                        <canvas id="zoomCanvas"></canvas>
+                        <div id="pixelInfo">Click image to inspect a pixel.</div>
+                    </div>
+                </div>
+                <div class="image-wrapper">
+                    <h3>Transformed</h3>
+                    <canvas id="transformedCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
